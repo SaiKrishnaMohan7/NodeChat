@@ -3,10 +3,11 @@ var socket = io();
 socket.on('connect', () => {
     console.log('Connectd to Server');
 
-    socket.emit('createMessage', {
-        message: 'HullaBullaEatMyLulla',
-        to: 'Server Singh'
-    });
+    // socket.emit('createMessage', {
+    //     from: 'PapaKaancha',
+    //     text: 'Humse!'
+    // });
+
 });
 
 socket.on('disconnect', () => {
@@ -14,5 +15,5 @@ socket.on('disconnect', () => {
 });
 
 socket.on('newMessage', (message) => {
-    console.log('Client Says', message);
+    console.log('New message emitted from server!', message);
 });

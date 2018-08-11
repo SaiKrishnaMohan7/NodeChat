@@ -13,17 +13,33 @@ app.use(express.static(publicPath));
 
 io.on('connection', (socket) => {
     console.log('New user connected');
+
+    // Welcome message to new user
+    socket.emit('newMessage', {
+        from: 'Admin',
+        text: 'Welcome Sai Chat',
+        createdAt: new Date()
+    });
+
+    // Inform other users that a new user has joined
+    socket.broadcast.emit('newMessage', {
+        from: 'Admin',
+        text: 'A new User has joined up',
+        createdAt: new Date()
+    });
+
+    socket.on('createMessage', (message) => {
+        console.log('createMessgae emitted from client!', message);
+        // Emit message to all the sockets (users) connected
+        io.emit('newMessage', {
+            form: message.from,
+            text: message.text,
+            createdAt: new Date()
+        });
+    });
+
     socket.on('disconnect', () => {
         console.log('User Disconnected');
-    });
-
-    socket.emit('newMessage', {
-        message: 'KhullaLullaKhadaLulla',
-        to: 'Client Sharma'
-    });
-
-    socket.on('createMessage', (newMessage) => {
-        console.log('Client wants to create a new msg', newMessage);
     });
 });
 
