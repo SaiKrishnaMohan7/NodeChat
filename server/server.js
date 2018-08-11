@@ -9,33 +9,23 @@ var app = express();
 var server = http.createServer(app);
 var io = socketIO(server);
 
+const {generateMessage} = require('./utils/message');
+
 app.use(express.static(publicPath));
 
 io.on('connection', (socket) => {
     console.log('New user connected');
 
     // Welcome message to new user
-    socket.emit('newMessage', {
-        from: 'Admin',
-        text: 'Welcome Sai Chat',
-        createdAt: new Date()
-    });
+    socket.emit('newMessage', generateMessage('Admin', 'Welcome to Sai Chat'));
 
     // Inform other users that a new user has joined
-    socket.broadcast.emit('newMessage', {
-        from: 'Admin',
-        text: 'A new User has joined up',
-        createdAt: new Date()
-    });
+    socket.broadcast.emit('newMessage', generateMessage('Admin', 'A new user has joined'));
 
     socket.on('createMessage', (message) => {
         console.log('createMessgae emitted from client!', message);
         // Emit message to all the sockets (users) connected
-        io.emit('newMessage', {
-            form: message.from,
-            text: message.text,
-            createdAt: new Date()
-        });
+        io.emit('newMessage', generateMessage(message.from. message.to));
     });
 
     socket.on('disconnect', () => {
