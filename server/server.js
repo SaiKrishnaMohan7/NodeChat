@@ -17,14 +17,17 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
     console.log('New user connected');
 
-    // Welcome message to new user
-    socket.emit('newMessage', generateMessage('Admin', 'Welcome to Sai Chat'));
-
     socket.on('join', (params, callback) => {
         if(!_.isString(_.trim(params.name)) || _.isString(_.trim(params.room))){
             callback('Name and room are required');
         }
 
+        socket.join(params.room);
+        // Welcome message to new user
+        socket.emit('newMessage', generateMessage('Admin', 'Welcome to Sai Chat'));
+    
+        socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin',
+                        `${params.name} has joined`));
         callback();
     });
 
