@@ -9,19 +9,22 @@ socket.on('disconnect', () => {
 });
 
 socket.on('newMessage', (message) => {
-    console.log('New message emitted from server!', message);
+    let formattedTime = moment(message.createdAt).format('H:HH:ss');
     let li = jQuery('<li></li>');
-    li.text(`${message.from}: ${message.text}`);
+
+    li.text(`${message.from} @ ${formattedTime}: ${message.text}`);
 
     jQuery('#messages').append(li);
 });
 
 socket.on('newLocationMessage', (locMsg) => {
+    let formattedTime = moment(locMsg.createdAt).format('H:HH:ss');
     let li = jQuery('<li></li>');
+
     // _blank redirection in a new tab
     let a = jQuery('<a target="_blank">My location</a>');
 
-    li.text(`${locMsg.from}: `);
+    li.text(`${locMsg.from} @ ${formattedTime}: `);
     a.attr('href', locMsg.url);
     li.append(a);
 

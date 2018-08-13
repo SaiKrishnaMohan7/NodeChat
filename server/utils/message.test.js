@@ -9,7 +9,7 @@ describe('generateMessage', () => {
         let from = 'someTest';
         let message = generateMessage(from, text);
 
-        expect(typeof(message.createdAt)).toBe('object');
+        expect(typeof(message.createdAt)).toBe('number');
         // expect(message.createdAt).toBeTruthy();
         expect(message).toMatchObject({from, text});
 
