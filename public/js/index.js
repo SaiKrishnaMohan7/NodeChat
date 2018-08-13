@@ -13,7 +13,7 @@ function autoScroll() {
     let lastMsgHeight = $newMessage.prev().innerHeight();
 
     if (clientHeight + scrollTop + newMsgHeight + lastMsgHeight >= scrollHeight) {
-        
+        $messages.scrollTop(scrollHeight);
     } else {
         
     }
