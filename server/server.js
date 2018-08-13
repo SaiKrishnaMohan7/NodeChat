@@ -22,10 +22,12 @@ io.on('connection', (socket) => {
     // Inform other users that a new user has joined
     socket.broadcast.emit('newMessage', generateMessage('Admin', 'A new user has joined'));
 
-    socket.on('createMessage', (message) => {
+    socket.on('createMessage', (message, callback) => {
         console.log('createMessgae emitted from client!', message);
         // Emit message to all the sockets (users) connected
-        io.emit('newMessage', generateMessage(message.from. message.to));
+        io.emit('newMessage', generateMessage(message.from, message.text));
+        // Inform Front-End
+        callback('This is an ack from server');
     });
 
     socket.on('disconnect', () => {
