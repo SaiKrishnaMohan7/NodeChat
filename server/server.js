@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const http = require('http');
 const socketIO = require('socket.io');
+const _ = require('lodash');
 
 const publicPath = path.join(__dirname, './../public');
 const PORT = process.env.PORT || 3000;
@@ -19,8 +20,13 @@ io.on('connection', (socket) => {
     // Welcome message to new user
     socket.emit('newMessage', generateMessage('Admin', 'Welcome to Sai Chat'));
 
-    // Inform other users that a new user has joined
-    socket.broadcast.emit('newMessage', generateMessage('Admin', 'A new user has joined'));
+    socket.on('join', (params, callback) => {
+        if(!_.isString(_.trim(params.name)) || _.isString(_.trim(params.room))){
+            callback('Name and room are required');
+        }
+
+        callback();
+    });
 
     socket.on('createMessage', (message, callback) => {
         console.log('createMessgae emitted from client!', message);
