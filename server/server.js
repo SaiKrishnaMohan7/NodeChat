@@ -27,7 +27,7 @@ io.on('connection', (socket) => {
         // Emit message to all the sockets (users) connected
         io.emit('newMessage', generateMessage(message.from, message.text));
         // Inform Front-End
-        callback('This is an ack from server');
+        callback();
     });
 
     socket.on('createLocationMessage', (coords) => {
