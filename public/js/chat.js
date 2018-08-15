@@ -20,7 +20,7 @@ function autoScroll() {
 }
 
 socket.on('connect', () => {
-    console.log('Connectd to Server');
+    console.log('Connected to Server');
     let params = jQuery.deparam(window.location.search);
 
     socket.emit('join', params, function(err){
@@ -31,6 +31,16 @@ socket.on('connect', () => {
             console.log('All good');
         }
     });
+});
+
+socket.on('updateUserList', (usersArray) => {
+    let ol = jQuery('<ol><ol>');
+
+    usersArray.forEach(user => {
+        ol.append(jQuery('<li></li>').text(user));
+    });
+
+    jQuery('#users').html(ol);
 });
 
 socket.on('disconnect', () => {
