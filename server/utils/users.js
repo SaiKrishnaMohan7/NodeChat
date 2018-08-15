@@ -4,7 +4,7 @@ class Users {
     }
 
     addUser(user){
-        this.users.push(user);
+        return this.users.push(user);
     }
 
     removeUser(id){
@@ -22,9 +22,9 @@ class Users {
 
     getUserList(room){
         let usersOfRoom = this.users.filter((user) => user.room === room);
-        let namesOfRoom = usersOfRoom.map((user) => user.name);
+        let usersInRoom = usersOfRoom.map((user) => user.name);
 
-        return namesOfRoom;
+        return usersInRoom;
     }
 }
 

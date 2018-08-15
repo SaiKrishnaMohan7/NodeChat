@@ -6,28 +6,44 @@ const _ = require('lodash');
 
 const publicPath = path.join(__dirname, './../public');
 const PORT = process.env.PORT || 3000;
+
+const {generateMessage, generateLocationMessage} = require('./utils/message');
+const {Users} = require('./utils/users');
+
 var app = express();
 var server = http.createServer(app);
 var io = socketIO(server);
-
-const {generateMessage, generateLocationMessage} = require('./utils/message');
+var users = new Users();
 
 app.use(express.static(publicPath));
 
 io.on('connection', (socket) => {
     console.log('New user connected');
 
+    // User Join
+    
     socket.on('join', (params, callback) => {
-        if(!_.isString(_.trim(params.name)) || _.isString(_.trim(params.room))){
-            callback('Name and room are required');
+        let room = params.room;
+        let name = params.name;
+        let id = socket.id;
+
+        if(!(_.isString(_.trim(name)) && _.isString(_.trim(room)))){
+            return callback('Name and room are required');
         }
 
-        socket.join(params.room);
+        socket.join(room);
+        // remove user from other rooms before adding to the new room
+        users.removeUser(id);
+        users.addUser({id, name, room});
+
+        // Emit to particular room
+        io.to(room).emit('updateUserList', users.getUserList(room));
+
         // Welcome message to new user
         socket.emit('newMessage', generateMessage('Admin', 'Welcome to Sai Chat'));
     
-        socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin',
-                        `${params.name} has joined`));
+        socket.broadcast.to(room).emit('newMessage', generateMessage('Admin',
+                        `${name} has joined`));
         callback();
     });
 
@@ -43,8 +59,15 @@ io.on('connection', (socket) => {
         io.emit('newLocationMessage', generateLocationMessage('Admin', coords.lat, coords.lng));
     });
 
+    // User Leave
     socket.on('disconnect', () => {
         console.log('User Disconnected');
+        let user = users.removeUser(socket.id);
+
+        if(user){
+            io.to(user.room).emit('updateUserList', users.getUserList(user.room));
+            io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left`));
+        }
     });
 });
 
