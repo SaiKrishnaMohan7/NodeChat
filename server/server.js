@@ -48,15 +48,25 @@ io.on('connection', (socket) => {
     });
 
     socket.on('createMessage', (message, callback) => {
-        console.log('createMessgae emitted from client!', message);
-        // Emit message to all the sockets (users) connected
-        io.emit('newMessage', generateMessage(message.from, message.text));
+        let user = users.getUser(socket.id);
+
+        if(user && _.isString(_.trim(message.text))){
+            // Emit message to all the sockets (users) connected
+            io.to(user.room).emit('newMessage', generateMessage(user.name, message.text));
+        }
+
         // Inform Front-End
         callback();
     });
 
     socket.on('createLocationMessage', (coords) => {
-        io.emit('newLocationMessage', generateLocationMessage('Admin', coords.lat, coords.lng));
+        let user = users.getUser(socket.id);
+
+        if(user && _.isObject(coords)){
+            // Emit message to all the sockets (users) connected
+            io.to(user.room).emit('newLocationMessage',
+                        generateLocationMessage(user.name, coords.lat, coords.lng));
+        }
     });
 
     // User Leave
