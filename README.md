@@ -14,6 +14,6 @@
     The app is live [here](https://sai-chat.herokuapp.com)
 
 ## Future Work
-[x] Case insensitive rooms
-[ ] Unique user name per room
-[x] Show currently active users
+- [x] Case insensitive rooms
+- [ ] Unique user name per room
+- [x] Show currently active users
