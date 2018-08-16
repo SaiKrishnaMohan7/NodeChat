@@ -90,7 +90,7 @@ jQuery('#message-form').on('submit', function(e){
 var $sendLoc = jQuery('#sendLocation');
 
 // Geolocation setup
-$sendLoc.on('click', function(){
+$sendLoc.click(() => {
     if(!navigator.geolocation) return alert('gelocation not supported');
 
     toggleLoc($sendLoc, 'Sending Location...');
