@@ -26,6 +26,12 @@ class Users {
 
         return usersInRoom;
     }
+
+    getActiveRooms(){
+        let rooms = this.users.map((user) => user.room);
+
+        return rooms;
+    }
 }
 
 module.exports = {Users};

@@ -4,6 +4,8 @@
     <title>Join | Sai Chat</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <link rel="stylesheet" href="/css/styles.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/libs/jquery-3.3.1.min.js"></script>
 </head>
 
 <body class="centered-form">
@@ -21,8 +23,16 @@
                     <input type="text" name="room"/>
             </div>
             <div class="form-field">
+                    <label>Active Rooms</label>
+                    <select id="room-select">
+                        <option selected>Click to View</option>
+                    </select>
+            </div>
+            <div class="form-field">
                 <button>Join</button>
             </div>
         </div>
     </form>
+
+    <script src="/js/index.js"></script>
 </body>

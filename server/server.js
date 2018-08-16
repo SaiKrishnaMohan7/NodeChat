@@ -20,14 +20,14 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
     console.log('New user connected');
 
+    socket.emit('updateActiveRooms', users.getActiveRooms());
     // User Join
-    
     socket.on('join', (params, callback) => {
         let room = params.room;
         let name = params.name;
         let id = socket.id;
 
-        if(!(_.isString(_.trim(name)) && _.isString(_.trim(room)))){
+        if(!(_.isString(_.trim(name)) && _.isString(_.trim(room.toLowerCase())))){
             return callback('Name and room are required');
         }
 
@@ -36,7 +36,7 @@ io.on('connection', (socket) => {
         users.removeUser(id);
         users.addUser({id, name, room});
 
-        // Emit to particular room
+        // Emit to particular room to update users in that room
         io.to(room).emit('updateUserList', users.getUserList(room));
 
         // Welcome message to new user
