@@ -14,7 +14,7 @@
   "author": "Sai Krishna Mohan",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.3",
+    "express": "^4.17.1",
     "lodash": "^4.17.10",
     "moment": "^2.22.2",
     "socket.io": "^2.1.1"
